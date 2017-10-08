@@ -1,0 +1,32 @@
+---
+- name: Add Docker APT key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Update repository cache
+  apt:
+    update_cache: true
+  changed_when: false
+
+# Required for the Docker repo
+- name: Add HTTPS support to APT
+  apt:
+    name: apt-transport-https
+
+- name: Add PPAs
+  apt_repository:
+    repo: "{{ item.repo }}"
+    filename: "{{ item.file }}"
+    update_cache: true
+  with_items:
+    - { file: ansible, repo: "ppa:ansible/ansible" }
+    - { file: docker, repo: "deb [arch={{ awx_arch }}] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable" }
+
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - ansible
+    - git
+    - make
+    - python-docker

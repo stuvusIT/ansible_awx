@@ -11,10 +11,10 @@ Ubuntu
 
 ## Role Variables
 
-| Name           | Default/Required | Description                    |
-|----------------|:----------------:|--------------------------------|
-| `awx_arch`     | `amd64`          | Architecture of the target CPU |
-| `awx_tunables` |                  | Dict of all installer tunables |
+| Name           | Default/Required | Description                                                                                     |
+|----------------|:----------------:|-------------------------------------------------------------------------------------------------|
+| `awx_arch`     | `amd64`          | Architecture of the target CPU                                                                  |
+| `awx_tunables` |                  | Dict of all installer [tunables](https://github.com/ansible/awx/blob/devel/installer/inventory) |
 
 ## Example Playbook
 
