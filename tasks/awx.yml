@@ -1,0 +1,42 @@
+---
+- name: Create directory for AWX
+  file:
+    path: "{{ awx_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Clone AWX
+  git:
+    repo: https://github.com/ansible/awx
+    dest: "{{ awx_home }}"
+
+- name: Copy inventory
+  copy:
+    src: "{{ awx_home }}/installer/inventory"
+    dest: "{{ awx_home }}/installer/inventory.local"
+    remote_src: true
+    force: false
+
+- name: Set AWX tunables
+  lineinfile:
+    path: "{{ awx_home }}/installer/inventory.local"
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  no_log: "{{ item.key == 'awx_secret_key' }}" # Don't log the secret key
+  with_dict: "{{ awx_tunables }}"
+
+# Build with official logos
+- name: Clone official AWX logos
+  git:
+    repo: https://github.com/ansible/awx-logos
+    dest: "{{ awx_home }}/awx-logos"
+  when: awx_tunables.awx_official | default(false)
+
+- name: Build AWX
+  command:
+    cmd: ansible-playbook -i inventory.local install.yml
+    chdir: "{{ awx_home }}/installer"
+  register: out
+  changed_when: "'changed=0' not in out.stdout"

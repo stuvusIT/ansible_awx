@@ -1,0 +1,3 @@
+---
+awx_arch: amd64
+awx_tunables: {}
