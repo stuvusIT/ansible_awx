@@ -1,4 +1,3 @@
 ---
 awx_arch: amd64
-awx_postgres_data: /var/lib/postgres
 awx_tunables: {}

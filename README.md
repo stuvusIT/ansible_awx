@@ -11,11 +11,10 @@ Ubuntu
 
 ## Role Variables
 
-| Name                | Default/Required    | Description                                      |
-|---------------------|:-------------------:|--------------------------------------------------|
-| `awx_arch`          | `amd64`             | Architecture of the target CPU                   |
-| `awx_postgres_data` | `/var/lib/postgres` | Location of the data of the PostgreSQL container |
-| `awx_tunables`      |                     | Dict of all installer tunables                   |
+| Name           | Default/Required | Description                    |
+|----------------|:----------------:|--------------------------------|
+| `awx_arch`     | `amd64`          | Architecture of the target CPU |
+| `awx_tunables` |                  | Dict of all installer tunables |
 
 ## Example Playbook
 
