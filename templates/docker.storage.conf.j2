@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H fd:// -s {{ awx_docker_storage }}
