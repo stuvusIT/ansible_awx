@@ -30,3 +30,4 @@
     - git
     - make
     - python-docker
+    - docker-ce
