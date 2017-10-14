@@ -31,3 +31,36 @@
     - make
     - python-docker
     - docker-ce
+
+- name: Create Docker override directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: awx_docker_storage is defined
+
+- name: Overwrite Docker storage driver
+  template:
+    src: docker.storage.conf.j2
+    dest: /etc/systemd/system/docker.service.d/storage.conf
+    owner: root
+    group: root
+    mode: 0755
+  register: create_out
+  when: awx_docker_storage is defined
+
+- name: Remove Docker storage override
+  file:
+    path: /etc/systemd/system/docker.service.d/storage.conf
+    state: absent
+  register: remove_out
+  when: awx_docker_storage is not defined
+
+- name: Restart Docker
+  systemd:
+    name: docker.service
+    state: restarted
+    daemon_reload: true
+  when: create_out.changed or remove_out.changed
