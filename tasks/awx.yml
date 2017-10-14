@@ -31,7 +31,7 @@
 - name: Clone official AWX logos
   git:
     repo: https://github.com/ansible/awx-logos
-    dest: "{{ awx_home }}/awx-logos"
+    dest: "{{ awx_home }}/../awx-logos"
   when: awx_tunables.awx_official | default(false)
 
 - name: Build AWX
