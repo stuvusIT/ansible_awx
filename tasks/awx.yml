@@ -52,6 +52,16 @@
         {% endfor %}
   when: awx_web_mounts is defined
 
+- name: Patch in the tmpfs for the worker
+  blockinfile:
+    path: "{{ awx_home }}/installer/local_docker/tasks/main.yml"
+    insertafter: "name: awx_task"
+    marker: "# {mark} ANSIBLE BLOCK FOR TMPFS"
+    block: |
+      {{ "    " }}tmpfs:
+      {{ "      " }}- /tmp:exec
+      {{ "      " }}- /run
+
 - name: Build AWX
   command:
     cmd: ansible-playbook -i inventory.local install.yml
