@@ -34,9 +34,34 @@
     dest: "{{ awx_home }}/../awx-logos"
   when: awx_tunables.awx_official | default(false)
 
+- name: Create copy of the Docker role
+  copy:
+    src: "{{ awx_home }}/installer/local_docker/tasks/main.yml"
+    dest: "{{ awx_home }}/installer/local_docker/tasks/main.yml.bak"
+    remote_src: true
+  when: awx_web_mounts is defined
+
+- name: Patch in the volumes
+  blockinfile:
+    path: "{{ awx_home }}/installer/local_docker/tasks/main.yml"
+    insertafter: "name: awx_web"
+    block: |
+      {{ "    " }}volumes:
+        {% for mount in awx_web_mounts %}
+          - "{{ mount.from }}:{{ mount.to | default(mount.from) }}:{% if mount.rw | default(false) %}rw{% else %}ro{% endif %}"
+        {% endfor %}
+  when: awx_web_mounts is defined
+
 - name: Build AWX
   command:
     cmd: ansible-playbook -i inventory.local install.yml
     chdir: "{{ awx_home }}/installer"
   register: out
   changed_when: "'changed=0' not in out.stdout"
+
+- name: Restore the Docker role
+  copy:
+    src: "{{ awx_home }}/installer/local_docker/tasks/main.yml.bak"
+    dest: "{{ awx_home }}/installer/local_docker/tasks/main.yml"
+    remote_src: true
+  when: awx_web_mounts is defined
