@@ -11,12 +11,12 @@ Ubuntu
 
 ## Role Variables
 
-| Name                 | Default/Required | Description                                                                                     |
-|----------------------|:----------------:|-------------------------------------------------------------------------------------------------|
-| `awx_arch`           | `amd64`          | Architecture of the target CPU                                                                  |
-| `awx_tunables`       |                  | Dict of all installer [tunables](https://github.com/ansible/awx/blob/devel/installer/inventory) |
-| `awx_docker_storage` |                  | Storage backend to use for Docker. Uses the default when omitted.                               |
-| `awx_web_mounts`     |                  | Allows mounting host files/directories into the web container. See next section                 |
+| Name                 | Default/Required | Description                                                                                        |
+|----------------------|:----------------:|----------------------------------------------------------------------------------------------------|
+| `awx_arch`           | `amd64`          | Architecture of the target CPU                                                                     |
+| `awx_tunables`       |                  | Dict of all installer [tunables](https://github.com/ansible/awx/blob/devel/installer/inventory)    |
+| `awx_docker_storage` |                  | Storage backend to use for Docker. Uses the default when omitted                                   |
+| `awx_web_mounts`     |                  | This list of dicts allows mounting host files/directories into the web container. See next section |
 
 ### Mounts
 
